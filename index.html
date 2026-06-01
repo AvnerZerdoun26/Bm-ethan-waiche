@@ -460,13 +460,8 @@
 <!-- HEADER -->
 <header id="siteHeader">
   <div class="logo-wrap">
-    <img src="logo.jpg" alt="EW monogram" onerror="this.style.display='none'">
+    <img src="WhatsApp_Image_2026-05-14_at_5_18_55_PM.jpeg" alt="EW monogram" onerror="this.style.display='none'">
   </div>
-  <nav id="mainNav" style="display:none">
-    <a href="#tefiline">Mise des téfilines</a>
-    <a href="#soiree">Soirée</a>
-    <a href="#reponse">Réponse</a>
-  </nav>
 </header>
 
 <!-- INTRO -->
@@ -477,7 +472,7 @@
   <div class="deco-line"></div>
   <div class="deco-line deco-line-2"></div>
 
-  <img class="intro-logo" src="logo.jpg" alt="EW monogram">
+  <img class="intro-logo" src="WhatsApp_Image_2026-05-14_at_5_18_55_PM.jpeg" alt="EW monogram">
   <h1 class="intro-title">Bar Mitzvah</h1>
   <p class="intro-name">Ethan Waiche</p>
   <p class="intro-date">Marseille · Septembre 2026</p>
@@ -500,6 +495,7 @@
   <div class="inv-navbar">
     <a href="#tefiline">Mise des téfilines</a>
     <a href="#soiree">Soirée</a>
+    <a href="#chabbat">Chabbat Hatan</a>
     <a href="#reponse">Réponse</a>
   </div>
 
@@ -566,6 +562,33 @@
         <small style="font-size:13px;color:var(--brown-light)">136 Avenue Clot Bey, 13008 Marseille</small>
       </p>
       <a class="btn-map" href="https://waze.com/ul?q=136+avenue+clot+bey+13008+marseille&navigate=yes" target="_blank">
+        <svg viewBox="0 0 384 512"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>
+        <span>Itinéraire</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ── CHABBAT HATAN ── -->
+  <div class="section-spacer" id="chabbat"></div>
+  <div class="arch-card reveal">
+    <div class="arch-inner">
+      <img class="section-icon" src="WhatsApp_Image_2026-05-14_at_5_18_55_PM.jpeg" alt="">
+      <h2 class="section-title">Chabbat Hatan</h2>
+      <p class="text-block">
+        … et … Waiche<br>
+        vous invitent à célébrer<br>
+        le Chabbat Hatan en l'honneur de
+      </p>
+      <span class="name-big" data-name="Ethan">Ethan</span>
+      <div class="divider"><span class="divider-diamond"></span></div>
+      <p class="text-block">
+        <strong>Samedi 19 Septembre 2026</strong>
+      </p>
+      <p class="text-block" style="margin-top:8px">
+        Haya Moushka<br>
+        <small style="font-size:13px;color:var(--brown-light)">18 Rue Liandier, Marseille</small>
+      </p>
+      <a class="btn-map" href="https://waze.com/ul?q=18+rue+liandier+marseille&navigate=yes" target="_blank">
         <svg viewBox="0 0 384 512"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>
         <span>Itinéraire</span>
       </a>
@@ -724,7 +747,6 @@ function openInvitation() {
   setTimeout(() => {
     intro.style.display = "none";
     document.querySelectorAll(".invitation").forEach(el => el.style.display = "block");
-    document.getElementById("mainNav").style.display = "flex";
     header.classList.add("scrolled");
     btnSon.classList.add("visible");
     audio.play().catch(() => { audio.muted = true; audio.play().catch(() => {}); });
@@ -765,6 +787,9 @@ function triggerReveal() {
     });
   }, { rootMargin: "0px 0px -40px 0px", threshold: 0.1 });
   document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+  document.querySelectorAll(".form-section .divider").forEach(d => {
+    d.closest(".reveal") || d.classList.add("revealed");
+  });
 }
 
 /* ── GOLD CONFETTI ── */
