@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+<head>
+  <meta charset="UTF-8">
+  <title>Bar Mitzvah Ethan Waiche</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Italiana&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --beige-light: #f5ede0;
+      --beige-mid:   #eedfc8;
+      --beige-dark:  #e0c9a8;
+      --brown:       #7a5c3a;
+      --brown-dark:  #5a3f22;
+      --brown-light: #c4a47a;
+      --text:        #4a3320;
+      --header-h:    64px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; scroll-padding-top: var(--header-h); overflow-x: hidden; }
+    body { font-family: 'Roboto', sans-serif; background: var(--beige-light); color: var(--text); overflow-x: hidden; }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: var(--header-h);
+      background: rgba(245,237,224,.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--beige-dark);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px;
+    }
+    .logo-wrap img { height: 44px; }
+    nav { display: flex; gap: 28px; }
+    nav a {
+      font-family: 'Roboto', sans-serif; font-size: 13px; letter-spacing: .08em;
+      color: var(--brown); text-decoration: none; text-transform: uppercase;
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--brown-dark); }
+
+    /* ── INTRO ── */
+    #introSection {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: var(--beige-light);
+      text-align: center; padding: 80px 24px 40px;
+    }
+    .intro-title {
+      font-family: 'Italiana', serif; font-size: clamp(44px, 10vw, 90px);
+      color: var(--brown); line-height: 1.1; letter-spacing: .02em;
+      opacity: 0; animation: fadeInUp .9s ease .3s forwards;
+    }
+    .intro-subtitle {
+      font-family: 'Cormorant Garamond', serif; font-size: clamp(18px, 4vw, 28px);
+      color: var(--brown-light); margin-top: 12px; font-style: italic;
+      opacity: 0; animation: fadeInUp .9s ease .55s forwards;
+    }
+    .intro-logo {
+      width: min(260px, 60vw); margin: 32px auto;
+      opacity: 0; animation: fadeIn 1.2s ease .8s forwards;
+    }
+    .btn-open {
+      margin-top: 36px;
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 36px;
+      background: var(--brown); color: #fff;
+      font-family: 'Roboto', sans-serif; font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
+      border: none; cursor: pointer; border-radius: 2px;
+      opacity: 0; animation: fadeInUp .9s ease 1s forwards;
+      transition: background .25s, transform .2s;
+    }
+    .btn-open:hover { background: var(--brown-dark); transform: scale(1.03); }
+
+    /* ── INVITATION SECTIONS (hidden until opened) ── */
+    .invitation { display: none; }
+
+    /* ── STICKY NAV BAR (invitation header) ── */
+    .inv-navbar {
+      position: sticky; top: var(--header-h); z-index: 900;
+      background: rgba(245,237,224,.96);
+      border-bottom: 1px solid var(--beige-dark);
+      padding: 12px 24px;
+      display: flex; justify-content: center; gap: 32px;
+    }
+    .inv-navbar a {
+      font-family: 'Roboto', sans-serif; font-size: 13px; color: var(--brown);
+      text-decoration: none; text-transform: uppercase; letter-spacing: .07em;
+      transition: color .2s;
+    }
+    .inv-navbar a:hover { color: var(--brown-dark); }
+
+    /* ── ARCH CARD ── */
+    .arch-card {
+      max-width: 520px; margin: 0 auto 60px; padding: 0 16px;
+    }
+    .arch-inner {
+      background: var(--beige-mid);
+      border: 1.5px solid var(--brown-light);
+      border-radius: 260px 260px 8px 8px;
+      padding: 56px 40px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .arch-inner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='160' viewBox='0 0 120 160'%3E%3Cpath d='M60 10 C30 30 20 60 30 90 C40 120 80 140 60 160' stroke='%23c4a47a' stroke-width='1.2' fill='none' opacity='.25'/%3E%3Cpath d='M50 0 C20 20 15 55 25 85 C35 115 75 135 55 160' stroke='%23c4a47a' stroke-width='1' fill='none' opacity='.18'/%3E%3C/svg%3E");
+      background-repeat: repeat-y; background-position: right 20px top;
+      pointer-events: none; opacity: .5;
+    }
+    .section-icon {
+      width: 44px; margin: 0 auto 18px;
+      opacity: .5;
+    }
+    .section-title {
+      font-family: 'Italiana', serif; font-size: clamp(30px,6vw,48px);
+      color: var(--brown); margin-bottom: 24px; line-height: 1.15;
+    }
+    .name-big {
+      font-family: 'Italiana', serif; font-size: clamp(36px,8vw,60px);
+      color: var(--brown); display: block; margin: 12px 0 18px;
+      line-height: 1;
+    }
+    .text-block {
+      font-family: 'Cormorant Garamond', serif; font-size: clamp(15px,3vw,19px);
+      line-height: 1.75; color: var(--text); margin: 10px 0;
+    }
+    .text-block strong { font-weight: 500; color: var(--brown-dark); }
+    .grandparents {
+      display: flex; justify-content: space-around; gap: 16px;
+      margin: 16px 0;
+    }
+    .grandparents .text-block { flex: 1; font-size: 14px; }
+    .divider {
+      width: 60px; height: 1px; background: var(--brown-light); margin: 20px auto;
+    }
+    .btn-map {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 20px; padding: 11px 28px;
+      background: var(--brown); color: #fff;
+      font-size: 13px; letter-spacing: .1em; text-transform: uppercase;
+      border-radius: 2px; text-decoration: none;
+      transition: background .2s, transform .2s;
+    }
+    .btn-map:hover { background: var(--brown-dark); transform: scale(1.03); }
+    .btn-map svg { width: 14px; fill: #fff; }
+
+    /* ── RESPONSE FORM ── */
+    .form-section {
+      max-width: 520px; margin: 0 auto 80px; padding: 0 16px;
+    }
+    .form-inner {
+      background: var(--beige-mid);
+      border: 1.5px solid var(--brown-light);
+      border-radius: 8px; padding: 48px 40px 40px; text-align: center;
+    }
+    .form-inner .section-title { margin-bottom: 32px; }
+    .form-group { margin-bottom: 16px; text-align: left; }
+    .form-input {
+      width: 100%; padding: 11px 14px;
+      background: transparent; border: none; border-bottom: 1.5px solid var(--brown-light);
+      font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--text);
+      outline: none; transition: border-color .2s;
+    }
+    .form-input:focus { border-color: var(--brown); }
+    .form-input::placeholder { color: var(--brown-light); }
+    .radio-group { margin: 20px 0 8px; }
+    .radio-group label {
+      display: flex; align-items: center; gap: 10px; cursor: pointer;
+      font-family: 'Cormorant Garamond', serif; font-size: 16px; margin: 6px 0;
+    }
+    .radio-group input[type=radio] { accent-color: var(--brown); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    textarea.form-input {
+      border: 1.5px solid var(--brown-light); border-radius: 4px;
+      padding: 11px 14px; resize: vertical; min-height: 80px;
+    }
+    .btn-submit {
+      margin-top: 24px; padding: 13px 48px;
+      background: var(--brown); color: #fff;
+      font-family: 'Roboto', sans-serif; font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
+      border: none; cursor: pointer; border-radius: 2px; width: 100%;
+      transition: background .2s;
+    }
+    .btn-submit:hover { background: var(--brown-dark); }
+    #form-status {
+      margin-top: 14px;
+      font-family: 'Cormorant Garamond', serif; font-size: 17px;
+      color: var(--brown);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--beige-dark); padding: 32px 24px;
+      text-align: center;
+      font-family: 'Roboto', sans-serif; font-size: 12px;
+      color: var(--brown); letter-spacing: .06em;
+    }
+    footer a { color: var(--brown); }
+
+    /* ── SOUND BUTTON ── */
+    #boutonSon {
+      display: none;
+      position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+      width: 52px; height: 52px; border-radius: 50%;
+      background: rgba(245,237,224,.9);
+      box-shadow: 0 2px 16px rgba(90,63,34,.25);
+      align-items: center; justify-content: center;
+      font-size: 24px; cursor: pointer;
+      transition: transform .2s;
+    }
+    #boutonSon.visible { display: flex; }
+    #boutonSon:hover { transform: scale(1.15); }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.18)} }
+    #boutonSon.pulse { animation: pulse 1.2s infinite; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeInUp {
+      from { opacity:0; transform:translateY(22px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity:0; } to { opacity:1; }
+    }
+    .reveal { opacity:0; transform:translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+    .revealed { opacity:1; transform:none; }
+
+    @media(max-width:600px){
+      .arch-inner, .form-inner { padding: 40px 22px 32px; }
+      nav { gap: 14px; }
+      header { padding: 0 14px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+    <img src="WhatsApp_Image_2026-05-14_at_5_18_55_PM.jpeg" alt="EW monogram" onerror="this.style.display='none'">
+  </div>
+  <nav id="mainNav" style="display:none">
+    <a href="#tefiline">Mise des téfilines</a>
+    <a href="#soiree">Soirée</a>
+    <a href="#reponse">Réponse</a>
+  </nav>
+</header>
+
+<!-- INTRO -->
+<div id="introSection">
+  <img class="intro-logo" src="WhatsApp_Image_2026-05-14_at_5_18_55_PM.jpeg" alt="EW monogram">
+  <h1 class="intro-title">Bar Mitzvah</h1>
+  <p class="intro-subtitle">Ethan Waiche</p>
+  <button class="btn-open" onclick="openInvitation()">
+    <svg width="10" viewBox="0 0 256 512" fill="currentColor"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg>
+    Voir l'invitation
+  </button>
+</div>
+
+<!-- INVITATION (hidden at start) -->
+<div class="invitation" id="invitation-wrap">
+
+  <!-- Sticky mini-nav -->
+  <div class="inv-navbar">
+    <a href="#tefiline">Mise des téfilines</a>
+    <a href="#soiree">Soirée</a>
+    <a href="#reponse">Réponse</a>
+  </div>
+
+  <!-- ── MISE DES TEFILINES ── -->
+  <div style="padding-top: 60px;" id="tefiline"></div>
+  <div class="arch-card reveal">
+    <div class="arch-inner">
+      <img class="section-icon" src="WhatsApp_Image_2026-05-14_at_5_18_55_PM.jpeg" alt="">
+      <h2 class="section-title">Mise des téfilines</h2>
+
+      <div class="grandparents">
+        <p class="text-block">M. &amp; Mme<br>…et … Waiche<br><em style="font-size:13px;color:var(--brown-light)">(grands-parents)</em></p>
+        <p class="text-block">M. &amp; Mme<br>…et … …<br><em style="font-size:13px;color:var(--brown-light)">(grands-parents)</em></p>
+      </div>
+
+      <div class="divider"></div>
+
+      <p class="text-block">
+        … et … Waiche<br>
+        ont la joie de vous faire part<br>
+        de la Bar Mitsva de leur fils
+      </p>
+
+      <span class="name-big">Ethan</span>
+
+      <p class="text-block">
+        et seront honorés de votre présence à la<br>
+        mise des Téfilines qui aura lieu
+      </p>
+
+      <div class="divider"></div>
+
+      <p class="text-block">
+        <strong>Le Jeudi 17 Septembre 2026<br>à 9h00</strong>
+      </p>
+      <p class="text-block" style="margin-top:8px">
+        Au Centre Chaare Rahamim<br>
+        <small>29 Rue Saint Suffren, 13006 Marseille</small>
+      </p>
+
+      <div class="divider"></div>
+
+      <p class="text-block">
+        L'office sera suivi d'un brunch<br>
+        <strong>Au Café Noilly</strong><br>
+        <small>146 Rue Paradis, 13006 Marseille</small>
+      </p>
+
+      <a class="btn-map" href="https://waze.com/ul?q=29+rue+saint+suffren+13006+marseille&navigate=yes" target="_blank">
+        <svg viewBox="0 0 384 512"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>
+        Itinéraire
+      </a>
+    </div>
+  </div>
+
+  <!-- ── SOIRÉE ── -->
+  <div id="soiree"></div>
+  <div class="arch-card reveal">
+    <div class="arch-inner">
+      <img class="section-icon" src="WhatsApp_Image_2026-05-14_at_5_18_55_PM.jpeg" alt="">
+      <h2 class="section-title">Soirée</h2>
+
+      <p class="text-block">
+        … et … Waiche<br>
+        seront heureux de vous recevoir à la soirée<br>
+        qu'ils donneront en l'honneur de
+      </p>
+
+      <span class="name-big">Ethan</span>
+
+      <div class="divider"></div>
+
+      <p class="text-block">
+        <strong>Le Mardi 15 Septembre 2026<br>à partir de 19h00</strong>
+      </p>
+      <p class="text-block" style="margin-top:8px">
+        Salle Palmeraie Borély<br>
+        <small>136 Avenue Clot Bey, 13008 Marseille</small>
+      </p>
+
+      <a class="btn-map" href="https://waze.com/ul?q=136+avenue+clot+bey+13008+marseille&navigate=yes" target="_blank">
+        <svg viewBox="0 0 384 512"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>
+        Itinéraire
+      </a>
+    </div>
+  </div>
+
+  <!-- ── FORMULAIRE ── -->
+  <div id="reponse"></div>
+  <div class="form-section reveal">
+    <div class="form-inner">
+      <img class="section-icon" src="WhatsApp_Image_2026-05-14_at_5_18_55_PM.jpeg" alt="">
+      <h2 class="section-title">Votre réponse</h2>
+
+      <form id="rsvpForm">
+        <div class="form-row">
+          <div class="form-group">
+            <input class="form-input" type="text" name="nom" placeholder="Nom" required>
+          </div>
+          <div class="form-group">
+            <input class="form-input" type="text" name="prenom" placeholder="Prénom" required>
+          </div>
+        </div>
+
+        <!-- Tefilines -->
+        <div class="radio-group">
+          <label><input type="radio" name="tef" value="Oui à la mise des téfilines" required> Oui à la mise des téfilines</label>
+          <label><input type="radio" name="tef" value="Ne pourra pas être présent"> Ne pourra pas être présent(e)</label>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <input class="form-input" type="number" name="adulte_tef" placeholder="Adultes (téfilines)" min="0">
+          </div>
+          <div class="form-group">
+            <input class="form-input" type="number" name="enfant_tef" placeholder="Enfants (téfilines)" min="0">
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <!-- Soirée -->
+        <div class="radio-group">
+          <label><input type="radio" name="soiree" value="Oui à la soirée" required> Oui à la soirée</label>
+          <label><input type="radio" name="soiree" value="Ne pourra pas être présent"> Ne pourra pas être présent(e)</label>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <input class="form-input" type="number" name="adulte_soiree" placeholder="Adultes (soirée)" min="0">
+          </div>
+          <div class="form-group">
+            <input class="form-input" type="number" name="enfant_soiree" placeholder="Enfants (soirée)" min="0">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:14px">
+          <textarea class="form-input" name="message" placeholder="Message pour Ethan" rows="3"></textarea>
+        </div>
+
+        <button class="btn-submit" type="submit">Répondre</button>
+        <div id="form-status"></div>
+      </form>
+    </div>
+  </div>
+
+</div><!-- /invitation-wrap -->
+
+<!-- FOOTER -->
+<footer class="invitation" id="footer-inv">
+  <p>Bar Mitzvah Ethan Waiche · Marseille 2026</p>
+</footer>
+
+<!-- SOUND BUTTON -->
+<div id="boutonSon" title="Son">🔊</div>
+
+<!-- ════════════════ SCRIPTS ════════════════ -->
+<script>
+// ──────────────────────────────────────────
+//  CONFIG — REMPLACEZ les deux valeurs ci-dessous
+// ──────────────────────────────────────────
+const MUSIC_URL   = "musique.mp3";   // <-- mettez votre URL mp3 ici
+const SCRIPT_URL  = "VOTRE_URL_GOOGLE_APPS_SCRIPT_ICI"; // <-- URL de déploiement Apps Script
+
+// ──────────────────────────────────────────
+//  AUDIO
+// ──────────────────────────────────────────
+const audio = new Audio(MUSIC_URL);
+audio.loop = true;
+
+const btn = document.getElementById("boutonSon");
+function setBtn(){
+  btn.textContent = audio.muted ? "🔇" : "🔊";
+  (audio.muted || audio.paused) ? btn.classList.remove("pulse") : btn.classList.add("pulse");
+}
+btn.addEventListener("click", ()=>{
+  audio.muted = !audio.muted;
+  if (!audio.muted && audio.paused) audio.play().catch(()=>{});
+  setBtn();
+});
+
+// ──────────────────────────────────────────
+//  OPEN INVITATION
+// ──────────────────────────────────────────
+function openInvitation(){
+  document.getElementById("introSection").style.display = "none";
+  document.querySelectorAll(".invitation").forEach(el => el.style.display = "block");
+  document.getElementById("mainNav").style.display = "flex";
+  btn.classList.add("visible");
+  audio.play().catch(()=>{ audio.muted=true; audio.play().catch(()=>{}); });
+  setBtn();
+  // scroll to top of invitation
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  // trigger reveals
+  setTimeout(triggerReveal, 200);
+}
+
+// ──────────────────────────────────────────
+//  SCROLL REVEAL
+// ──────────────────────────────────────────
+function triggerReveal(){
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add("revealed"); });
+  }, { rootMargin: "0px 0px -60px 0px" });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+}
+
+// ──────────────────────────────────────────
+//  GOOGLE SHEETS FORM SUBMIT
+// ──────────────────────────────────────────
+document.getElementById("rsvpForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+  const status = document.getElementById("form-status");
+  const btn_submit = this.querySelector(".btn-submit");
+  status.textContent = "Envoi en cours…";
+  btn_submit.disabled = true;
+
+  const data = {
+    timestamp:     new Date().toLocaleString("fr-FR"),
+    nom:           this.nom.value,
+    prenom:        this.prenom.value,
+    tef:           this.tef.value,
+    adulte_tef:    this.adulte_tef.value || "0",
+    enfant_tef:    this.enfant_tef.value || "0",
+    soiree:        this.soiree.value,
+    adulte_soiree: this.adulte_soiree.value || "0",
+    enfant_soiree: this.enfant_soiree.value || "0",
+    message:       this.message.value
+  };
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+    status.textContent = "Merci ! Votre réponse a bien été enregistrée. 🎉";
+    this.reset();
+  } catch(err) {
+    status.textContent = "Une erreur est survenue. Veuillez réessayer.";
+    btn_submit.disabled = false;
+  }
+});
+</script>
+
+</body>
+</html>
