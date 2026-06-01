@@ -1,6 +1,3 @@
-Voici le code complet — copiez tout ce qui suit :
-
-```html
 <!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Bar-Mitzva · Ethan Waiche</title><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;500;600&family=Great+Vibes&family=Italiana&display=swap" rel="stylesheet"><style>:root{
   --bl:  #fdf6ec;
   --bm:  #f5e8d0;
@@ -550,8 +547,4 @@ const SCRIPT_URL='VOTRE_URL_GOOGLE_APPS_SCRIPT_ICI';
 async function sendRSVP(e){e.preventDefault();const btn=document.getElementById('btn-send'),btnTxt=document.getElementById('btn-send-txt');const nom=document.getElementById('f-nom').value.trim();if(!nom){document.getElementById('f-nom').focus();return}const v=(id)=>parseInt(document.getElementById(id)?.value)||0;const chk=(name)=>document.querySelector('input[name="'+name+'"]:checked')?.value||'non';const tefVal=chk('tef'),soirVal=chk('soir');const msg=document.getElementById('f-msg').value.trim();btn.disabled=true;btnTxt.innerHTML=TRANSLATIONS[currentLang]['btn-sending'];const params=new URLSearchParams({nom,timestamp:new Date().toLocaleString('fr-FR'),tef:tefVal==='oui'?'Oui':'Non',tef_adultes:tefVal==='oui'?v('f-nb-tef-adultes'):0,tef_enfants:tefVal==='oui'?v('f-nb-tef-enfants'):0,soir:soirVal==='oui'?'Oui':'Non',soir_adultes:soirVal==='oui'?v('f-nb-soir-adultes'):0,soir_enfants:soirVal==='oui'?v('f-nb-soir-enfants'):0,message:msg});try{await fetch(SCRIPT_URL+'?'+params.toString(),{method:'GET',mode:'no-cors'})}catch{}const form=document.getElementById('rsvp-form');form.style.transition='opacity .4s';form.style.opacity='0';setTimeout(()=>{form.style.display='none';document.getElementById('conf').style.display='block'},400);}
 </script>
 </body></html>
-```
 
----
-
-**À faire :** placez `logo.png`, `photo.png` et `musique.mp3` dans le même dossier que votre fichier HTML.
