@@ -161,12 +161,14 @@
     @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
     .invitation { display: none; }
     .inv-navbar {
-      position: sticky; top: var(--header-h); z-index: 900;
+      position: fixed; top: var(--header-h); left: 0; right: 0; z-index: 900;
       background: rgba(247,240,230,.97);
       border-bottom: 1px solid var(--beige-dark);
       padding: 14px 24px;
       display: flex; justify-content: center; gap: 40px;
     }
+    /* Compense la hauteur de la navbar pour le contenu en dessous */
+    #invitation-wrap { padding-top: 49px; }
     .inv-navbar a {
       font-family: 'Roboto', sans-serif; font-size: 11px; color: var(--brown);
       text-decoration: none; text-transform: uppercase; letter-spacing: .12em;
@@ -591,7 +593,7 @@
             Ne pourra pas être présent(e)
           </label>
         </div>
-        <div class="form-row">
+        <div class="form-row" id="row-tef">
           <div class="form-group">
             <input class="form-input" type="number" name="adulte_tef" placeholder="Adultes (téfilines)" min="0">
           </div>
@@ -613,7 +615,7 @@
             Ne pourra pas être présent(e)
           </label>
         </div>
-        <div class="form-row">
+        <div class="form-row" id="row-soiree">
           <div class="form-group">
             <input class="form-input" type="number" name="adulte_soiree" placeholder="Adultes (soirée)" min="0">
           </div>
@@ -714,7 +716,6 @@ function openInvitation() {
   // ── Lancement de la musique dès le clic (geste utilisateur) ──
   audio.muted = false;
   audio.play().catch(() => {
-    // Fallback si le navigateur bloque : on tente en muet puis on désilence
     audio.muted = true;
     audio.play().catch(() => {});
   });
@@ -791,6 +792,42 @@ function launchConfetti() {
   }
   draw();
 }
+
+// ── Masquer/afficher les champs adultes/enfants selon la réponse ──
+(function() {
+  const rowTef    = document.getElementById("row-tef");
+  const rowSoiree = document.getElementById("row-soiree");
+
+  function toggle(radioName, row) {
+    document.querySelectorAll(`input[name="${radioName}"]`).forEach(r => {
+      r.addEventListener("change", () => {
+        const absent = r.value === "Ne pourra pas être présent" && r.checked;
+        const present = r.value !== "Ne pourra pas être présent" && r.checked;
+        if (absent) {
+          row.style.transition = "opacity .3s, max-height .3s";
+          row.style.overflow = "hidden";
+          row.style.maxHeight = "0";
+          row.style.opacity = "0";
+        }
+        if (present) {
+          row.style.maxHeight = "120px";
+          row.style.opacity = "1";
+        }
+      });
+    });
+  }
+
+  // État initial : affichés
+  [rowTef, rowSoiree].forEach(r => {
+    r.style.overflow = "hidden";
+    r.style.maxHeight = "120px";
+    r.style.transition = "opacity .3s, max-height .3s";
+    r.style.opacity = "1";
+  });
+
+  toggle("tef",    rowTef);
+  toggle("soiree", rowSoiree);
+})();
 
 document.getElementById("rsvpForm").addEventListener("submit", async function(e) {
   e.preventDefault();
