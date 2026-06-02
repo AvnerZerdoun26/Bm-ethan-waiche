@@ -106,6 +106,7 @@
     .intro-logo {
       width: min(120px,30vw); margin: 0 auto 24px;
       opacity: 0; animation: fadeInScale 1s ease .2s forwards, floatLogo 5s ease-in-out 1.2s infinite;
+      mix-blend-mode: multiply;
     }
     @keyframes floatLogo {
       0%,100% { transform: translateY(0); }
@@ -176,8 +177,6 @@
       height: 1px; background: var(--gold); transition: right .3s ease;
     }
     .inv-navbar a:hover::after { right: 0; }
-
-    /* ── ARCH CARD ── */
     .arch-card {
       max-width: 500px; margin: 0 auto 72px; padding: 0 20px;
       transition: transform .4s cubic-bezier(.22,1,.36,1);
@@ -206,52 +205,28 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Cpath d='M30 5 L35 20 L50 20 L38 30 L43 45 L30 36 L17 45 L22 30 L10 20 L25 20 Z' fill='none' stroke='%23c9a84c' stroke-width='1' opacity='0.3'/%3E%3C/svg%3E");
       pointer-events: none; opacity: .4; z-index: 2;
     }
-
-    /* ── PHOTO BANNER (tefiline card only) ── */
     .arch-photo-banner {
-      width: 100%;
-      height: 220px;
-      position: relative;
-      overflow: hidden;
-      border-radius: 240px 240px 0 0;
-      flex-shrink: 0;
+      width: 100%; height: 220px;
+      position: relative; overflow: hidden;
+      border-radius: 240px 240px 0 0; flex-shrink: 0;
     }
     .arch-photo-banner img {
       width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: center 40%;
-      display: block;
-      transition: transform .6s ease;
+      object-fit: cover; object-position: center 40%;
+      display: block; transition: transform .6s ease;
     }
-    .arch-card:hover .arch-photo-banner img {
-      transform: scale(1.04);
-    }
+    .arch-card:hover .arch-photo-banner img { transform: scale(1.04); }
     .arch-photo-banner::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(90,63,34,0) 30%,
-        rgba(247,240,230,.85) 100%
-      );
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(90,63,34,0) 30%, rgba(247,240,230,.85) 100%);
       pointer-events: none;
     }
-
-    /* ── CARD CONTENT (padding when photo present) ── */
-    .arch-content {
-      padding: 32px 44px 0;
-    }
-
-    /* ── NON-PHOTO CARDS (original padding) ── */
-    .arch-inner.no-photo {
-      padding: 60px 44px 52px;
-    }
-    .arch-inner.no-photo::before {
-      border-radius: 230px 230px 4px 4px;
-    }
-
+    .arch-content { padding: 32px 44px 0; }
+    .arch-inner.no-photo { padding: 60px 44px 52px; }
+    .arch-inner.no-photo::before { border-radius: 230px 230px 4px 4px; }
     .section-icon {
       width: 48px; margin: 0 auto 22px; filter: sepia(.2);
+      mix-blend-mode: multiply;
       transition: transform .6s ease;
     }
     .arch-card:hover .section-icon { transform: rotate(15deg) scale(1.08); }
@@ -449,6 +424,7 @@
     <img src="WhatsApp_Image_2026-05-14_at_5_18_55_PM.jpeg" alt="EW monogram" onerror="this.style.display='none'">
   </div>
 </header>
+
 <!-- INTRO -->
 <div id="introSection">
   <div class="orb orb-1"></div>
@@ -470,12 +446,12 @@
     <span>Voir l'invitation</span>
   </button>
 </div>
+
 <!-- INVITATION -->
 <div class="invitation" id="invitation-wrap">
   <div class="inv-navbar">
     <a href="#tefiline">Mise des téfilines</a>
     <a href="#soiree">Soirée</a>
-    <a href="#chabbat">Chabbat Hatan</a>
     <a href="#reponse">Réponse</a>
   </div>
 
@@ -483,11 +459,9 @@
   <div class="section-spacer" id="tefiline"></div>
   <div class="arch-card reveal">
     <div class="arch-inner">
-      <!-- PHOTO BANNER -->
       <div class="arch-photo-banner">
         <img src="photo.jpg" alt="Mise des téfilines" onerror="this.parentElement.style.display='none'">
       </div>
-      <!-- CONTENT -->
       <div class="arch-content">
         <h2 class="section-title" style="margin-top:28px">Mise des téfilines</h2>
         <div class="grandparents">
@@ -548,33 +522,6 @@
         <small style="font-size:13px;color:var(--brown-light)">136 Avenue Clot Bey, 13008 Marseille</small>
       </p>
       <a class="btn-map" href="https://waze.com/ul?q=136+avenue+clot+bey+13008+marseille&navigate=yes" target="_blank">
-        <svg viewBox="0 0 384 512"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>
-        <span>Itinéraire</span>
-      </a>
-    </div>
-  </div>
-
-  <!-- ── CHABBAT HATAN ── -->
-  <div class="section-spacer" id="chabbat"></div>
-  <div class="arch-card reveal">
-    <div class="arch-inner no-photo">
-      <img class="section-icon" src="WhatsApp_Image_2026-05-14_at_5_18_55_PM.jpeg" alt="">
-      <h2 class="section-title">Chabbat Hatan</h2>
-      <p class="text-block">
-        … et … Waiche<br>
-        vous invitent à célébrer<br>
-        le Chabbat Hatan en l'honneur de
-      </p>
-      <span class="name-big" data-name="Ethan">Ethan</span>
-      <div class="divider"><span class="divider-diamond"></span></div>
-      <p class="text-block">
-        <strong>Samedi 19 Septembre 2026</strong>
-      </p>
-      <p class="text-block" style="margin-top:8px">
-        Haya Moushka<br>
-        <small style="font-size:13px;color:var(--brown-light)">18 Rue Liandier, Marseille</small>
-      </p>
-      <a class="btn-map" href="https://waze.com/ul?q=18+rue+liandier+marseille&navigate=yes" target="_blank">
         <svg viewBox="0 0 384 512"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>
         <span>Itinéraire</span>
       </a>
@@ -647,10 +594,12 @@
     </div>
   </div>
 </div><!-- /invitation-wrap -->
+
 <footer class="invitation" id="footer-inv">
   <p>Bar Mitzvah Ethan Waiche &nbsp;·&nbsp; Marseille 2026</p>
 </footer>
 <div id="boutonSon" title="Son"></div>
+
 <script>
 const MUSIC_URL  = "musique.mp3";
 const SCRIPT_URL = "VOTRE_URL_GOOGLE_APPS_SCRIPT_ICI";
