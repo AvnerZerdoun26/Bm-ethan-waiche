@@ -250,9 +250,33 @@
       font-family: 'Cormorant Garamond', serif; font-size: clamp(15px,3vw,18px);
       line-height: 1.85; color: var(--text); margin: 10px 0;
     }
-    .text-block strong { font-weight: 500; color: var(--brown-dark); }
-    .grandparents { display: flex; justify-content: space-around; gap: 16px; margin: 16px 0; }
-    .grandparents .text-block { flex: 1; font-size: 14px; }
+
+    /* ── GRANDS-PARENTS : côte à côte avec trait vertical ── */
+    .grandparents {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: 0;
+      margin: 16px 0;
+    }
+    .grandparent-item {
+      flex: 1;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(13px, 2.8vw, 15px);
+      line-height: 1.7;
+      color: var(--text);
+      padding: 10px 16px;
+    }
+    .grandparent-item:first-child { text-align: right; }
+    .grandparent-item:last-child  { text-align: left; }
+    .grandparent-sep {
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+      flex-shrink: 0;
+      align-self: stretch;
+      opacity: .55;
+    }
+
     .divider {
       display: flex; align-items: center; justify-content: center; gap: 10px;
       margin: 24px auto; width: 80%;
@@ -412,7 +436,7 @@
       nav { gap: 16px; }
       header { padding: 0 16px; }
       .form-row { grid-template-columns: 1fr; }
-      .grandparents { flex-direction: column; gap: 8px; }
+      .grandparent-item { padding: 8px 10px; font-size: 13px; }
     }
   </style>
 </head>
@@ -464,10 +488,22 @@
       </div>
       <div class="arch-content">
         <h2 class="section-title" style="margin-top:28px">Mise des téfilines</h2>
+
+        <!-- Grands-parents côte à côte avec trait vertical -->
         <div class="grandparents">
-          <p class="text-block">M. &amp; Mme<br>Meyer et Muriel Waiche<br><em style="font-size:13px;color:var(--brown-light)">(grands-parents)</em></p>
-          <p class="text-block">M. &amp; Mme<br> Moise et Odette Chemouny<br><em style="font-size:13px;color:var(--brown-light)">(grands-parents)</em></p>
+          <div class="grandparent-item">
+            <strong>Meyer &amp; Muriel</strong><br>
+            <span style="font-size:.9em;color:var(--brown-light)">Waiche</span><br>
+            <em style="font-size:.82em;color:var(--brown-light)">(grands-parents)</em>
+          </div>
+          <div class="grandparent-sep"></div>
+          <div class="grandparent-item">
+            <strong>Moise &amp; Odette</strong><br>
+            <span style="font-size:.9em;color:var(--brown-light)">Chemouny</span><br>
+            <em style="font-size:.82em;color:var(--brown-light)">(grands-parents)</em>
+          </div>
         </div>
+
         <div class="divider"><span class="divider-diamond"></span></div>
         <p class="text-block">
           Johan et Jessica Waiche<br>
@@ -598,30 +634,38 @@
 <footer class="invitation" id="footer-inv">
   <p>Bar Mitzvah Ethan Waiche &nbsp;·&nbsp; Marseille 2026</p>
 </footer>
+
 <div id="boutonSon" title="Son"></div>
 
 <script>
 const MUSIC_URL  = "musique.mp3";
 const SCRIPT_URL = "VOTRE_URL_GOOGLE_APPS_SCRIPT_ICI";
+
 const audio = new Audio(MUSIC_URL);
 audio.loop = true;
+
 const btnSon = document.getElementById("boutonSon");
+
 function setBtn() {
   btnSon.textContent = (audio.muted || audio.paused) ? "🔇" : "🎵";
   (audio.muted || audio.paused) ? btnSon.classList.remove("pulse") : btnSon.classList.add("pulse");
 }
+
 btnSon.addEventListener("click", () => {
   audio.muted = !audio.muted;
   if (!audio.muted && audio.paused) audio.play().catch(() => {});
   setBtn();
 });
+
 const header = document.getElementById("siteHeader");
 const progressBar = document.getElementById("progress-bar");
+
 window.addEventListener("scroll", () => {
   header.classList.toggle("scrolled", window.scrollY > 20);
   const docH = document.documentElement.scrollHeight - window.innerHeight;
   if (docH > 0) progressBar.style.width = (window.scrollY / docH * 100) + "%";
 }, { passive: true });
+
 function createSparkles() {
   const intro = document.getElementById("introSection");
   for (let i = 0; i < 18; i++) {
@@ -633,6 +677,7 @@ function createSparkles() {
   }
 }
 createSparkles();
+
 let lastSpark = 0;
 document.addEventListener("mousemove", (e) => {
   const now = Date.now();
@@ -646,6 +691,7 @@ document.addEventListener("mousemove", (e) => {
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 800);
 });
+
 document.querySelectorAll(".btn-open, .btn-submit, .btn-map").forEach(btn => {
   btn.addEventListener("click", function(e) {
     const r = document.createElement("span");
@@ -657,23 +703,33 @@ document.querySelectorAll(".btn-open, .btn-submit, .btn-map").forEach(btn => {
     setTimeout(() => r.remove(), 700);
   });
 });
+
 function openInvitation() {
   const intro = document.getElementById("introSection");
   intro.style.transition = "opacity .5s ease, transform .5s ease";
   intro.style.opacity = "0";
   intro.style.transform = "translateY(-16px)";
   progressBar.style.display = "block";
+
+  // ── Lancement de la musique dès le clic (geste utilisateur) ──
+  audio.muted = false;
+  audio.play().catch(() => {
+    // Fallback si le navigateur bloque : on tente en muet puis on désilence
+    audio.muted = true;
+    audio.play().catch(() => {});
+  });
+
   setTimeout(() => {
     intro.style.display = "none";
     document.querySelectorAll(".invitation").forEach(el => el.style.display = "block");
     header.classList.add("scrolled");
     btnSon.classList.add("visible");
-    audio.play().catch(() => { audio.muted = true; audio.play().catch(() => {}); });
     setBtn();
     window.scrollTo({ top: 0, behavior: "instant" });
     setTimeout(triggerReveal, 100);
   }, 500);
 }
+
 function wrapNameLetters() {
   document.querySelectorAll(".name-big").forEach(el => {
     const text = el.textContent;
@@ -682,12 +738,14 @@ function wrapNameLetters() {
     ).join("");
   });
 }
+
 function animateName(el) {
   el.classList.add("animate");
   el.querySelectorAll(".letter").forEach((l, i) => {
     l.style.transitionDelay = (i * 0.08) + "s";
   });
 }
+
 function triggerReveal() {
   wrapNameLetters();
   const io = new IntersectionObserver((entries) => {
@@ -703,6 +761,7 @@ function triggerReveal() {
   }, { rootMargin: "0px 0px -40px 0px", threshold: 0.1 });
   document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 }
+
 function launchConfetti() {
   const canvas = document.getElementById("confetti-canvas");
   canvas.style.display = "block";
@@ -732,6 +791,7 @@ function launchConfetti() {
   }
   draw();
 }
+
 document.getElementById("rsvpForm").addEventListener("submit", async function(e) {
   e.preventDefault();
   const status = document.getElementById("form-status");
