@@ -801,6 +801,19 @@ document.getElementById("rsvpForm").addEventListener("submit", async function(e)
   e.preventDefault();
   const status = document.getElementById("form-status");
   const btnSubmit = this.querySelector(".btn-submit");
+
+  // Règle : si présence confirmée à la soirée, il faut au minimum 1 adulte ET 1 enfant
+  if (this.soiree.value === "Oui à la soirée") {
+    const adulteSoiree = parseInt(this.adulte_soiree.value || "0", 10);
+    const enfantSoiree = parseInt(this.enfant_soiree.value || "0", 10);
+    if (adulteSoiree < 1 || enfantSoiree < 1) {
+      status.style.color = "#b03a2e";
+      status.textContent = "Merci d'indiquer au moins 1 adulte et 1 enfant pour la soirée.";
+      return;
+    }
+  }
+  status.style.color = "";
+
   status.textContent = "Envoi en cours…";
   btnSubmit.disabled = true;
   const data = {
