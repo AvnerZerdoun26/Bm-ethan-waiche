@@ -251,7 +251,6 @@
       font-family: 'Cormorant Garamond', serif; font-size: clamp(15px,3vw,18px);
       line-height: 1.85; color: var(--text); margin: 10px 0;
     }
-    /* ── GRANDS-PARENTS : côte à côte avec trait vertical ── */
     .grandparents {
       display: flex;
       align-items: stretch;
@@ -433,6 +432,11 @@
       transition: opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1);
     }
     .reveal.revealed { opacity: 1; transform: none; }
+    .field-error {
+      color: #b03a2e; font-size: 12px; margin-top: -12px; margin-bottom: 12px;
+      font-family: 'Roboto', sans-serif; display: none;
+    }
+    .form-input.input-error { border-color: #b03a2e; }
     @media(max-width:600px){
       .arch-inner.no-photo, .form-inner { padding: 44px 24px 36px; }
       .arch-content { padding: 24px 24px 0; }
@@ -489,7 +493,6 @@
       </div>
       <div class="arch-content">
         <h2 class="section-title" style="margin-top:28px">Mise des téfilines</h2>
-        <!-- Grands-parents côte à côte avec trait vertical -->
         <div class="grandparents">
           <div class="grandparent-item">
             <strong>Mayer &amp; Muriel</strong><br>
@@ -567,7 +570,7 @@
     <div class="form-inner">
       <img class="section-icon" src="WhatsApp_Image_2026-05-14_at_5_18_55_PM.jpeg" alt="">
       <h2 class="section-title">Votre réponse</h2>
-      <form id="rsvpForm">
+      <form id="rsvpForm" novalidate>
         <div class="form-row">
           <div class="form-group">
             <input class="form-input" type="text" name="nom" placeholder="Nom" required>
@@ -590,10 +593,12 @@
         </div>
         <div class="form-row" id="row-tef">
           <div class="form-group">
-            <input class="form-input" type="number" name="adulte_tef" placeholder="Adultes (téfilines)" min="0">
+            <input class="form-input" type="number" name="adulte_tef" placeholder="Adultes (téfilines)" min="1" max="8" step="1">
+            <div class="field-error" id="err-adulte_tef">Merci d'indiquer un nombre d'adultes entre 1 et 8.</div>
           </div>
           <div class="form-group">
-            <input class="form-input" type="number" name="enfant_tef" placeholder="Enfants (téfilines)" min="0">
+            <input class="form-input" type="number" name="enfant_tef" placeholder="Enfants (téfilines)" min="0" max="8" step="1">
+            <div class="field-error" id="err-enfant_tef">Merci d'indiquer un nombre d'enfants entre 0 et 8.</div>
           </div>
         </div>
         <div style="height:8px"></div>
@@ -612,10 +617,12 @@
         </div>
         <div class="form-row" id="row-soiree">
           <div class="form-group">
-            <input class="form-input" type="number" name="adulte_soiree" placeholder="Adultes (soirée)" min="0">
+            <input class="form-input" type="number" name="adulte_soiree" placeholder="Adultes (soirée)" min="1" max="8" step="1">
+            <div class="field-error" id="err-adulte_soiree">Merci d'indiquer un nombre d'adultes entre 1 et 8.</div>
           </div>
           <div class="form-group">
-            <input class="form-input" type="number" name="enfant_soiree" placeholder="Enfants (soirée)" min="0">
+            <input class="form-input" type="number" name="enfant_soiree" placeholder="Enfants (soirée)" min="0" max="8" step="1">
+            <div class="field-error" id="err-enfant_soiree">Merci d'indiquer un nombre d'enfants entre 0 et 8.</div>
           </div>
         </div>
         <div class="form-group" style="margin-top:16px">
@@ -780,6 +787,9 @@ function launchConfetti() {
           row.style.overflow = "hidden";
           row.style.maxHeight = "0";
           row.style.opacity = "0";
+          // On efface les erreurs et les valeurs quand la section devient inutile
+          row.querySelectorAll(".form-input").forEach(inp => inp.classList.remove("input-error"));
+          row.querySelectorAll(".field-error").forEach(err => err.style.display = "none");
         }
         if (present) {
           row.style.maxHeight = "120px";
@@ -797,20 +807,50 @@ function launchConfetti() {
   toggle("tef",    rowTef);
   toggle("soiree", rowSoiree);
 })();
+
+// ── Validation adultes/enfants ──
+// Adultes : 1 à 8 | Enfants : 0 à 8
+// Appliqué uniquement quand la personne a répondu "Oui" à la section concernée.
+function validateCount(input, min, max) {
+  const errEl = document.getElementById("err-" + input.name);
+  const raw = input.value.trim();
+  const n = parseInt(raw, 10);
+  const valid = raw !== "" && Number.isInteger(n) && n >= min && n <= max;
+  if (!valid) {
+    input.classList.add("input-error");
+    if (errEl) errEl.style.display = "block";
+  } else {
+    input.classList.remove("input-error");
+    if (errEl) errEl.style.display = "none";
+  }
+  return valid;
+}
+
+function validateSection(form, radioName, adultField, childField) {
+  const radio = form.querySelector(`input[name="${radioName}"]:checked`);
+  const isPresent = radio && radio.value !== "Ne pourra pas être présent";
+  if (!isPresent) return true; // rien à valider si absent
+
+  const adultOk = validateCount(form[adultField], 1, 8);
+  const childOk = validateCount(form[childField], 0, 8);
+  return adultOk && childOk;
+}
+
 document.getElementById("rsvpForm").addEventListener("submit", async function(e) {
   e.preventDefault();
   const status = document.getElementById("form-status");
   const btnSubmit = this.querySelector(".btn-submit");
 
-  // Règle : si présence confirmée à la soirée, il faut au minimum 1 adulte ET 1 enfant
-  if (this.soiree.value === "Oui à la soirée") {
-    const adulteSoiree = parseInt(this.adulte_soiree.value || "0", 10);
-    const enfantSoiree = parseInt(this.enfant_soiree.value || "0", 10);
-    if (adulteSoiree < 1 || enfantSoiree < 1) {
-      status.style.color = "#b03a2e";
-      status.textContent = "Merci d'indiquer au moins 1 adulte et 1 enfant pour la soirée.";
-      return;
-    }
+  const tefOk    = validateSection(this, "tef",    "adulte_tef",    "enfant_tef");
+  const soireeOk = validateSection(this, "soiree", "adulte_soiree", "enfant_soiree");
+
+  if (!tefOk || !soireeOk) {
+    status.style.color = "#b03a2e";
+    status.textContent = "Merci de corriger le nombre d'adultes (1 à 8) et d'enfants (0 à 8) indiqué en rouge.";
+    // Scroll jusqu'au premier champ en erreur
+    const firstError = this.querySelector(".input-error");
+    if (firstError) firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
   }
   status.style.color = "";
 
