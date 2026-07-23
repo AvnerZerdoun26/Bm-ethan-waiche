@@ -593,14 +593,15 @@
         </div>
         <div class="form-row" id="row-tef">
           <div class="form-group">
-            <input class="form-input" type="number" name="adulte_tef" placeholder="Adultes (téfilines)" min="1" max="8" step="1">
-            <div class="field-error" id="err-adulte_tef">Merci d'indiquer un nombre d'adultes entre 1 et 8.</div>
+            <input class="form-input" type="number" name="adulte_tef" placeholder="Adultes (téfilines)" min="0" max="8" step="1">
+            <div class="field-error" id="err-adulte_tef">Merci d'indiquer un nombre d'adultes entre 0 et 8.</div>
           </div>
           <div class="form-group">
             <input class="form-input" type="number" name="enfant_tef" placeholder="Enfants (téfilines)" min="0" max="8" step="1">
             <div class="field-error" id="err-enfant_tef">Merci d'indiquer un nombre d'enfants entre 0 et 8.</div>
           </div>
         </div>
+        <div class="field-error" id="err-total_tef">Merci d'indiquer au moins 1 personne (adulte ou enfant).</div>
         <div style="height:8px"></div>
         <div class="divider" style="margin:16px auto"><span class="divider-diamond"></span></div>
         <div class="radio-group">
@@ -617,14 +618,15 @@
         </div>
         <div class="form-row" id="row-soiree">
           <div class="form-group">
-            <input class="form-input" type="number" name="adulte_soiree" placeholder="Adultes (soirée)" min="1" max="8" step="1">
-            <div class="field-error" id="err-adulte_soiree">Merci d'indiquer un nombre d'adultes entre 1 et 8.</div>
+            <input class="form-input" type="number" name="adulte_soiree" placeholder="Adultes (soirée)" min="0" max="8" step="1">
+            <div class="field-error" id="err-adulte_soiree">Merci d'indiquer un nombre d'adultes entre 0 et 8.</div>
           </div>
           <div class="form-group">
             <input class="form-input" type="number" name="enfant_soiree" placeholder="Enfants (soirée)" min="0" max="8" step="1">
             <div class="field-error" id="err-enfant_soiree">Merci d'indiquer un nombre d'enfants entre 0 et 8.</div>
           </div>
         </div>
+        <div class="field-error" id="err-total_soiree">Merci d'indiquer au moins 1 personne (adulte ou enfant).</div>
         <div class="form-group" style="margin-top:16px">
           <textarea class="form-input" name="message" placeholder="Message pour Ethan" rows="3"></textarea>
         </div>
@@ -790,6 +792,8 @@ function launchConfetti() {
           // On efface les erreurs et les valeurs quand la section devient inutile
           row.querySelectorAll(".form-input").forEach(inp => inp.classList.remove("input-error"));
           row.querySelectorAll(".field-error").forEach(err => err.style.display = "none");
+          const totalErr = document.getElementById("err-total_" + radioName);
+          if (totalErr) totalErr.style.display = "none";
         }
         if (present) {
           row.style.maxHeight = "120px";
@@ -809,7 +813,7 @@ function launchConfetti() {
 })();
 
 // ── Validation adultes/enfants ──
-// Adultes : 1 à 8 | Enfants : 0 à 8
+// Adultes : 0 à 8 | Enfants : 0 à 8, mais au moins 1 personne au total (adulte + enfant)
 // Appliqué uniquement quand la personne a répondu "Oui" à la section concernée.
 function validateCount(input, min, max) {
   const errEl = document.getElementById("err-" + input.name);
@@ -829,11 +833,32 @@ function validateCount(input, min, max) {
 function validateSection(form, radioName, adultField, childField) {
   const radio = form.querySelector(`input[name="${radioName}"]:checked`);
   const isPresent = radio && radio.value !== "Ne pourra pas être présent";
-  if (!isPresent) return true; // rien à valider si absent
+  const totalErr = document.getElementById("err-total_" + radioName);
+  if (!isPresent) {
+    if (totalErr) totalErr.style.display = "none";
+    return true; // rien à valider si absent
+  }
 
-  const adultOk = validateCount(form[adultField], 1, 8);
-  const childOk = validateCount(form[childField], 0, 8);
-  return adultOk && childOk;
+  const adultInput = form[adultField];
+  const childInput = form[childField];
+  const adultOk = validateCount(adultInput, 0, 8);
+  const childOk = validateCount(childInput, 0, 8);
+
+  if (!adultOk || !childOk) {
+    if (totalErr) totalErr.style.display = "none";
+    return false;
+  }
+
+  const adultN = parseInt(adultInput.value.trim(), 10);
+  const childN = parseInt(childInput.value.trim(), 10);
+  if (adultN + childN < 1) {
+    adultInput.classList.add("input-error");
+    childInput.classList.add("input-error");
+    if (totalErr) totalErr.style.display = "block";
+    return false;
+  }
+  if (totalErr) totalErr.style.display = "none";
+  return true;
 }
 
 document.getElementById("rsvpForm").addEventListener("submit", async function(e) {
@@ -846,7 +871,7 @@ document.getElementById("rsvpForm").addEventListener("submit", async function(e)
 
   if (!tefOk || !soireeOk) {
     status.style.color = "#b03a2e";
-    status.textContent = "Merci de corriger le nombre d'adultes (1 à 8) et d'enfants (0 à 8) indiqué en rouge.";
+    status.textContent = "Merci de corriger les informations indiquées en rouge.";
     // Scroll jusqu'au premier champ en erreur
     const firstError = this.querySelector(".input-error");
     if (firstError) firstError.scrollIntoView({ behavior: "smooth", block: "center" });
